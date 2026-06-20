@@ -214,6 +214,73 @@
         .card-title-only {
             transition: opacity 0.3s ease;
         }
+
+        /* ===== RESPONSIVE FIXES ===== */
+
+        /* Mobile nav drawer */
+        #mobile-nav-panel {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+        }
+
+        #mobile-nav-panel.open {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        #mobile-menu-btn .bar {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #mobile-menu-btn.open .bar-top {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        #mobile-menu-btn.open .bar-mid {
+            opacity: 0;
+        }
+
+        #mobile-menu-btn.open .bar-bottom {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* How-it-works connector line: only meaningful at lg, recalculated to be safe */
+        @media (min-width: 1024px) {
+            .step-connector {
+                left: calc(16.67% + 2.5rem);
+                right: calc(16.67% + 2.5rem);
+            }
+        }
+
+        /* Testimonial carousel responsiveness */
+        .testimonial-slide {
+            width: calc(100% - 0px);
+        }
+
+        @media (min-width: 640px) {
+            .testimonial-slide {
+                width: calc((100% - 16px) / 2);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .testimonial-slide {
+                width: calc((100% - 32px) / 3);
+            }
+        }
+
+        /* Fluid headline scaling for very small phones */
+        @media (max-width: 380px) {
+            h1.font-h1 {
+                font-size: 32px !important;
+            }
+
+            h2.font-h2 {
+                font-size: 30px !important;
+            }
+        }
     </style>
 </head>
 
@@ -231,62 +298,75 @@
     </div>
     <!-- Navigation Header -->
     <header
-        class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center pt-gutter px-margin-mobile md:px-margin-desktop">
-        <nav class="rounded-full bg-white/80 backdrop-blur-xl border-[0.5px] border-white/20 shadow-md flex items-center justify-between w-full max-w-7xl px-6 py-3 transition-all duration-500 ease-in-out"
+        class="fixed top-0 left-0 right-0 z-50 flex flex-col items-center justify-center pt-3 sm:pt-gutter px-margin-mobile md:px-margin-desktop">
+        <nav class="rounded-[1.75rem] sm:rounded-full bg-white/80 backdrop-blur-xl border-[0.5px] border-white/20 shadow-md flex flex-col w-full max-w-7xl px-4 sm:px-6 py-3 transition-all duration-500 ease-in-out"
             id="main-nav">
-            <div class="flex items-center gap-12">
-                <a class="flex items-center gap-2 group" href="#">
+            <div class="flex items-center justify-between w-full">
+                <a class="flex items-center gap-2 group min-w-0" href="#">
                     <img alt="Chrisentia Solutions Logo"
-                        class="h-8 w-8 rounded-full border border-outline-variant group-hover:scale-110 transition-transform duration-500"
+                        class="h-8 w-8 rounded-full border border-outline-variant group-hover:scale-110 transition-transform duration-500 flex-shrink-0"
                         src="images/logo-chrisentia.jpg" />
-                    <span class="font-h3 text-[20px] font-black text-on-surface">Chrisentia Solutions</span>
+                    <span class="font-h3 text-[16px] sm:text-[20px] font-black text-on-surface truncate">Chrisentia
+                        Solutions</span>
                 </a>
-                <ul class="hidden md:flex items-center gap-8">
-                    <li><a class="text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                <div class="flex items-center gap-3 sm:gap-6 flex-shrink-0">
+                    <ul class="hidden md:flex items-center gap-8">
+                        <li><a class="text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                                href="#projects">Projects</a></li>
+                        <li><a class="text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                                href="#studio">Studio</a></li>
+                        <li><a class="text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                                href="#connect">Connect</a></li>
+                    </ul>
+
+                    <a href="https://wa.me/94777158913" target="_blank" rel="noopener noreferrer"
+                        class="bg-primary-container text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[13px] sm:text-body-sm font-semibold flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group overflow-hidden whitespace-nowrap">
+
+                        <span class="text-roll-container hidden xs:inline-block sm:inline-block">
+                            <span class="text-roll">
+                                <span>Book a call</span>
+                                <span>Book a call</span>
+                            </span>
+                        </span>
+                        <div
+                            class="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-500 flex-shrink-0">
+                            <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+                        </div>
+                    </a>
+
+                    <!-- Mobile hamburger -->
+                    <button id="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false"
+                        class="md:hidden relative w-9 h-9 flex flex-col items-center justify-center gap-[5px] flex-shrink-0">
+                        <span class="bar bar-top w-5 h-[2px] bg-on-surface rounded-full"></span>
+                        <span class="bar bar-mid w-5 h-[2px] bg-on-surface rounded-full"></span>
+                        <span class="bar bar-bottom w-5 h-[2px] bg-on-surface rounded-full"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile nav drawer -->
+            <div id="mobile-nav-panel" class="md:hidden w-full">
+                <ul class="flex flex-col gap-1 pt-4 mt-3 border-t border-outline-variant/20">
+                    <li><a class="block py-2.5 text-body-lg font-medium text-on-surface-variant hover:text-primary transition-colors"
                             href="#projects">Projects</a></li>
-                    <li><a class="text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                    <li><a class="block py-2.5 text-body-lg font-medium text-on-surface-variant hover:text-primary transition-colors"
                             href="#studio">Studio</a></li>
-                    <li><a class="text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                    <li><a class="block py-2.5 text-body-lg font-medium text-on-surface-variant hover:text-primary transition-colors"
                             href="#connect">Connect</a></li>
                 </ul>
-            </div>
-            <div class="flex items-center gap-6">
-                <!-- <div class="hidden lg:flex items-center gap-2 text-label-caps text-on-surface-variant/60">
-                    <span class="material-symbols-outlined text-[14px]">schedule</span>
-                    <span id="london-time">05:37:30 GMT+1</span>
-                </div> -->
-                <!-- <button
-                    class="bg-primary-container text-white px-6 py-2.5 rounded-full text-body-sm font-semibold flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group overflow-hidden"> -->
-
-                <a href="https://wa.me/94777158913" target="_blank" rel="noopener noreferrer"
-                    class="bg-primary-container text-white px-6 py-2.5 rounded-full text-body-sm font-semibold flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group overflow-hidden">
-
-                    <span class="text-roll-container">
-                        <span class="text-roll">
-                            <span>Book a strategy call</span>
-                            <span>Book a strategy call</span>
-                        </span>
-                    </span>
-                    <div
-                        class="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
-                        <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
-                    </div>
-
-                </a>
-
-                <!-- </button> -->
             </div>
         </nav>
     </header>
     <main class="relative z-20">
         <!-- SECTION 1: HERO -->
         <section
-            class="min-h-screen flex flex-col justify-center px-margin-mobile md:px-margin-desktop pt-32 pb-16 relative overflow-hidden reveal">
-            <div class="max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <div class="lg:col-span-8 space-y-10">
+            class="min-h-screen flex flex-col justify-center px-margin-mobile md:px-margin-desktop pt-36 sm:pt-40 md:pt-32 pb-16 relative overflow-hidden reveal">
+            <div
+                class="max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <div class="lg:col-span-8 space-y-6 sm:space-y-8 md:space-y-10">
                     <div
                         class="inline-flex items-center gap-3 bg-surface-container-high/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 bezier-transition hover:border-primary-container/30 group">
-                        <div class="relative w-10 h-10 flex items-center justify-center">
+                        <div class="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
                             <svg class="absolute inset-0 w-full h-full kinetic-rotate text-primary-container"
                                 viewbox="0 0 100 100">
                                 <path d="M50 0L61.2 38.8L100 50L61.2 61.2L50 100L38.8 61.2L0 50L38.8 38.8Z"
@@ -300,41 +380,30 @@
                             Partner</span>
                     </div>
                     <h1
-                        class="font-h1 text-h1-mobile md:text-h1 max-w-4xl text-on-surface leading-[1.05] tracking-tight">
+                        class="font-h1 text-[36px] leading-[1.1] xs:text-h1-mobile md:text-h1 max-w-4xl text-on-surface tracking-tight">
                         Get Expert Help with your Assignments.
                     </h1>
-                    <p class="text-body-lg text-on-surface-variant/80 max-w-2xl leading-relaxed">
+                    <p class="text-[15px] sm:text-body-lg text-on-surface-variant/80 max-w-2xl leading-relaxed">
                         Connect with qualified tutors for personalized help, or share your expertise and earn money.
                         Professional guidance tailored to your academic journey.
                     </p>
-                    <div class="flex flex-wrap items-center gap-6 pt-4">
-                        <!-- <button
-                            class="bg-primary-container text-on-primary font-bold px-8 py-5 rounded-full text-body-lg flex items-center gap-3 shadow-xl shadow-primary-container/20 hover:scale-105 active:scale-95 bezier-transition group overflow-hidden">
-                            <span class="text-roll-container">
-                                <span class="text-roll">
-                                    <span>Start a project</span>
-                                    <span>Start a project</span>
-                                </span>
-                            </span>
-                            <span
-                                class="material-symbols-outlined group-hover:rotate-90 bezier-transition">arrow_forward</span>
-                        </button> -->
+                    <div class="flex flex-wrap items-center gap-4 sm:gap-6 pt-4">
                         <div class="flex -space-x-3">
                             <div
-                                class="w-12 h-12 rounded-full border-2 border-white bg-surface-dim overflow-hidden shadow-sm">
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white bg-surface-dim overflow-hidden shadow-sm">
                                 <img class="w-full h-full object-cover" src="images/avatar-student-1.jpg" />
                             </div>
                             <div
-                                class="w-12 h-12 rounded-full border-2 border-white bg-surface-dim overflow-hidden shadow-sm">
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white bg-surface-dim overflow-hidden shadow-sm">
                                 <img class="w-full h-full object-cover" src="images/avatar-student-2.jpg" />
                             </div>
                             <div
-                                class="w-12 h-12 rounded-full border-2 border-white bg-primary flex items-center justify-center text-white text-body-sm font-bold shadow-sm">
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white bg-primary flex items-center justify-center text-white text-body-sm font-bold shadow-sm">
                                 +
                             </div>
                         </div>
                         <div class="flex flex-col">
-                            <span class="font-h3 text-xl font-bold">500+</span>
+                            <span class="font-h3 text-lg sm:text-xl font-bold">500+</span>
                             <span class="text-label-caps text-on-surface-variant/60 uppercase">Trusted Students</span>
                         </div>
                     </div>
@@ -361,25 +430,27 @@
             </div>
         </section>
         <!-- SECTION 2: ABOUT -->
-        <section class="py-32 bg-white px-margin-mobile md:px-margin-desktop relative reveal" id="studio">
+        <section class="py-20 sm:py-28 md:py-32 bg-white px-margin-mobile md:px-margin-desktop relative reveal"
+            id="studio">
             <div class="max-w-container-max mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
-                    <div class="space-y-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-24 items-start">
+                    <div class="space-y-8 sm:space-y-10 md:space-y-12">
                         <div class="flex items-center gap-4 group">
                             <span
-                                class="w-12 h-12 rounded-full bg-primary-container text-white flex items-center justify-center font-bold text-h3 group-hover:rotate-12 bezier-transition">1</span>
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary-container text-white flex items-center justify-center font-bold text-h3 group-hover:rotate-12 bezier-transition flex-shrink-0">1</span>
                             <span class="text-label-caps text-primary tracking-[0.3em] font-black uppercase">Introducing
                                 Chrisentia Solutions</span>
                         </div>
-                        <h2 class="font-h2 text-h2-mobile md:text-h2 text-on-surface leading-[1.1]">
+                        <h2 class="font-h2 text-[30px] leading-[1.15] sm:text-h2-mobile md:text-h2 text-on-surface">
                             Strategy-led academic support, delivering results for students globally.
                         </h2>
-                        <p class="text-body-lg text-on-surface-variant leading-relaxed max-w-xl">
+                        <p class="text-[15px] sm:text-body-lg text-on-surface-variant leading-relaxed max-w-xl">
                             Achieve academic excellence with guidance from highly qualified experts. Connect with
                             Masters graduates, Engineering professionals, and subject-matter specialists who provide
                             accurate, personalized support tailored to your learning goals.
                         </p>
-                        <div class="grid grid-cols-2 gap-8 pt-8 border-t border-outline-variant/30">
+                        <div
+                            class="grid grid-cols-1 xs:grid-cols-2 gap-6 sm:gap-8 pt-6 sm:pt-8 border-t border-outline-variant/30">
                             <div class="space-y-2">
                                 <h4 class="font-bold text-primary">Global Access</h4>
                                 <p class="text-body-sm text-on-surface-variant">Available 24/7 for students across all
@@ -392,13 +463,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-6 h-full">
+                    <div class="grid grid-cols-2 gap-4 sm:gap-6 h-full">
                         <div
-                            class="mt-24 rounded-3xl overflow-hidden shadow-xl hover:-translate-y-4 transition-transform duration-500">
+                            class="mt-12 sm:mt-16 md:mt-24 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl hover:-translate-y-4 transition-transform duration-500">
                             <img class="w-full h-full object-cover" src="images/about-image-1.jpg" />
                         </div>
                         <div
-                            class="rounded-3xl overflow-hidden shadow-xl hover:-translate-y-4 transition-transform duration-500 delay-100">
+                            class="rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl hover:-translate-y-4 transition-transform duration-500 delay-100">
                             <img class="w-full h-full object-cover" src="images/about-image-2.jpg" />
                         </div>
                     </div>
@@ -408,38 +479,39 @@
 
         <!-- SECTION: HOW IT WORKS -->
         <section
-            class="py-32 bg-surface-container-lowest px-margin-mobile md:px-margin-desktop relative overflow-hidden reveal"
+            class="py-20 sm:py-28 md:py-32 bg-surface-container-lowest px-margin-mobile md:px-margin-desktop relative overflow-hidden reveal"
             id="how-it-works">
             <div class="max-w-container-max mx-auto relative z-10">
-                <div class="text-center max-w-2xl mx-auto mb-20 space-y-4">
+                <div class="text-center max-w-2xl mx-auto mb-14 sm:mb-20 space-y-4">
                     <span class="text-label-caps text-primary tracking-[0.3em] font-black uppercase">The Process</span>
-                    <h2 class="font-h2 text-h2-mobile md:text-h2 text-on-surface">How it Works</h2>
-                    <p class="text-body-lg text-on-surface-variant">Our streamlined approach ensures you get the
-                        academic support you need, exactly when you need it.</p>
+                    <h2 class="font-h2 text-[30px] sm:text-h2-mobile md:text-h2 text-on-surface">How it Works</h2>
+                    <p class="text-[15px] sm:text-body-lg text-on-surface-variant">Our streamlined approach ensures you
+                        get the academic support you need, exactly when you need it.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative">
 
                     <!-- Connector line (desktop only) -->
                     <div
-                        class="hidden md:block absolute top-[72px] left-[calc(16.67%+2rem)] right-[calc(16.67%+2rem)] h-px border-t-2 border-dashed border-outline-variant/40 z-0">
+                        class="step-connector hidden lg:block absolute top-[72px] h-px border-t-2 border-dashed border-outline-variant/40 z-0">
                     </div>
 
                     <!-- Step 1 -->
                     <div
-                        class="group p-8 rounded-[2rem] bg-white border border-outline-variant/30 hover:border-primary-container/40 hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center relative z-10">
-                        <div class="relative mb-8">
+                        class="group p-6 sm:p-8 rounded-[2rem] bg-white border border-outline-variant/30 hover:border-primary-container/40 hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center relative z-10">
+                        <div class="relative mb-6 sm:mb-8">
                             <!-- Step number badge -->
                             <div
-                                class="w-20 h-20 rounded-2xl bg-primary-container/10 flex items-center justify-center group-hover:bg-primary-container/20 transition-colors duration-500">
-                                <span class="material-symbols-outlined text-primary-container text-5xl"
+                                class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-primary-container/10 flex items-center justify-center group-hover:bg-primary-container/20 transition-colors duration-500">
+                                <span class="material-symbols-outlined text-primary-container text-4xl sm:text-5xl"
                                     style="font-variation-settings: 'FILL' 1;">upload_file</span>
                             </div>
                             <span
                                 class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary-container text-white text-xs font-black flex items-center justify-center">1</span>
                         </div>
-                        <div class="space-y-4">
-                            <h3 class="font-h3 text-2xl font-bold text-on-surface">Submit Your Assignment</h3>
+                        <div class="space-y-3 sm:space-y-4">
+                            <h3 class="font-h3 text-xl sm:text-2xl font-bold text-on-surface">Submit Your Assignment
+                            </h3>
                             <p class="text-body-sm text-on-surface-variant">Upload your requirements and deadline. Our
                                 platform handles the rest with complete confidentiality.</p>
                         </div>
@@ -447,18 +519,18 @@
 
                     <!-- Step 2 -->
                     <div
-                        class="group p-8 rounded-[2rem] bg-white border border-outline-variant/30 hover:border-primary-container/40 hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center relative z-10">
-                        <div class="relative mb-8">
+                        class="group p-6 sm:p-8 rounded-[2rem] bg-white border border-outline-variant/30 hover:border-primary-container/40 hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center relative z-10">
+                        <div class="relative mb-6 sm:mb-8">
                             <div
-                                class="w-20 h-20 rounded-2xl bg-secondary-container/20 flex items-center justify-center group-hover:bg-secondary-container/40 transition-colors duration-500">
-                                <span class="material-symbols-outlined text-secondary text-5xl"
+                                class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-secondary-container/20 flex items-center justify-center group-hover:bg-secondary-container/40 transition-colors duration-500">
+                                <span class="material-symbols-outlined text-secondary text-4xl sm:text-5xl"
                                     style="font-variation-settings: 'FILL' 1;">person_search</span>
                             </div>
                             <span
                                 class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-secondary text-white text-xs font-black flex items-center justify-center">2</span>
                         </div>
-                        <div class="space-y-4">
-                            <h3 class="font-h3 text-2xl font-bold text-on-surface">Match with an Expert</h3>
+                        <div class="space-y-3 sm:space-y-4">
+                            <h3 class="font-h3 text-xl sm:text-2xl font-bold text-on-surface">Match with an Expert</h3>
                             <p class="text-body-sm text-on-surface-variant">Our system pairs you with a verified tutor
                                 in minutes, ensuring the perfect fit for your specific domain.</p>
                         </div>
@@ -466,18 +538,18 @@
 
                     <!-- Step 3 -->
                     <div
-                        class="group p-8 rounded-[2rem] bg-white border border-outline-variant/30 hover:border-primary-container/40 hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center relative z-10">
-                        <div class="relative mb-8">
+                        class="group p-6 sm:p-8 rounded-[2rem] bg-white border border-outline-variant/30 hover:border-primary-container/40 hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center relative z-10">
+                        <div class="relative mb-6 sm:mb-8">
                             <div
-                                class="w-20 h-20 rounded-2xl bg-tertiary/10 flex items-center justify-center group-hover:bg-tertiary/20 transition-colors duration-500">
-                                <span class="material-symbols-outlined text-tertiary text-5xl"
+                                class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-tertiary/10 flex items-center justify-center group-hover:bg-tertiary/20 transition-colors duration-500">
+                                <span class="material-symbols-outlined text-tertiary text-4xl sm:text-5xl"
                                     style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
                             </div>
                             <span
                                 class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-tertiary text-white text-xs font-black flex items-center justify-center">3</span>
                         </div>
-                        <div class="space-y-4">
-                            <h3 class="font-h3 text-2xl font-bold text-on-surface">Achieve Excellence</h3>
+                        <div class="space-y-3 sm:space-y-4">
+                            <h3 class="font-h3 text-xl sm:text-2xl font-bold text-on-surface">Achieve Excellence</h3>
                             <p class="text-body-sm text-on-surface-variant">Receive high-quality guidance and elevate
                                 your grades with personalized feedback and expert insights.</p>
                         </div>
@@ -488,40 +560,43 @@
         </section>
 
         <!-- SECTION 3: project FIELDS -->
-        <section class="py-32 bg-surface-container-low/50 px-margin-mobile md:px-margin-desktop reveal" id="projects">
+        <section
+            class="py-20 sm:py-28 md:py-32 bg-surface-container-low/50 px-margin-mobile md:px-margin-desktop reveal"
+            id="projects">
             <div class="max-w-container-max mx-auto">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
-                    <div class="space-y-4">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 mb-14 sm:mb-20">
+                    <div class="space-y-3 sm:space-y-4">
                         <span class="text-label-caps text-on-surface-variant uppercase tracking-widest">Fields of
                             Excellence</span>
-                        <h2 class="font-h2 text-h2-mobile md:text-h2">Specialized Domains.</h2>
+                        <h2 class="font-h2 text-[30px] sm:text-h2-mobile md:text-h2">Specialized Domains.</h2>
                     </div>
-                    <p class="max-w-md text-on-surface-variant/80">From complex engineering projects to data analytics,
-                        our experts cover the spectrum of modern academic disciplines.</p>
+                    <p class="max-w-md text-[15px] sm:text-base text-on-surface-variant/80">From complex engineering
+                        projects to data analytics, our experts cover the spectrum of modern academic disciplines.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
 
                     <!-- Field Card 1 -->
                     <div
-                        class="axion-card field-card group relative h-[400px] rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
+                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
                         <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
                             src="images/submarine.jpeg" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
                         <!-- Title only (default state) -->
                         <div
-                            class="absolute bottom-8 left-8 right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-2xl font-bold">Hydrodynamic CFD Analysis of DARPA SUBOFF
-                                Submarine</h3>
+                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
+                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Hydrodynamic CFD Analysis of
+                                DARPA SUBOFF Submarine</h3>
                         </div>
 
                         <!-- Title + description (shown on hover) -->
                         <div
-                            class="absolute inset-0 z-20 flex items-end p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
+                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
                             <div>
-                                <h3 class="text-white font-h3 text-2xl font-bold">Hydrodynamic CFD Analysis of DARPA
-                                    SUBOFF Submarine</h3>
+                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Hydrodynamic CFD Analysis
+                                    of
+                                    DARPA SUBOFF Submarine</h3>
                                 <p class="text-white/80 text-sm mt-2">Performed Computational Fluid Dynamics (CFD)
                                     simulation and hydrodynamic analysis of the DARPA SUBOFF submarine geometry using
                                     ANSYS Fluent. The project focused on turbulence modelling, mesh optimization, drag
@@ -533,22 +608,22 @@
 
                     <!-- Field Card 2 -->
                     <div
-                        class="axion-card field-card group relative h-[400px] rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
+                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
                         <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
                             src="images/Supersonic Missile.png" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
                         <div
-                            class="absolute bottom-8 left-8 right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-2xl font-bold">Supersonic Missile Aerodynamic Analysis
-                                Using CFD</h3>
+                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
+                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Supersonic Missile Aerodynamic
+                                Analysis Using CFD</h3>
                         </div>
 
                         <div
-                            class="absolute inset-0 z-20 flex items-end p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
+                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
                             <div>
-                                <h3 class="text-white font-h3 text-2xl font-bold">Supersonic Missile Aerodynamic
-                                    Analysis Using CFD</h3>
+                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Supersonic Missile
+                                    Aerodynamic Analysis Using CFD</h3>
                                 <p class="text-white/80 text-sm mt-2">Performed high-speed aerodynamic simulation and
                                     optimization of a 2D supersonic missile using ANSYS Fluent. The study evaluated drag
                                     and lift performance under varying attack angles while applying advanced structured
@@ -559,22 +634,22 @@
 
                     <!-- Field Card 3 -->
                     <div
-                        class="axion-card field-card group relative h-[400px] rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
+                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
                         <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
                             src="images/structural-design.png" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
                         <div
-                            class="absolute bottom-8 left-8 right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-2xl font-bold">Structural Design & Finite Element
-                                Analysis of an AI Data Center</h3>
+                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
+                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Structural Design & Finite
+                                Element Analysis of an AI Data Center</h3>
                         </div>
 
                         <div
-                            class="absolute inset-0 z-20 flex items-end p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
+                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
                             <div>
-                                <h3 class="text-white font-h3 text-2xl font-bold">Structural Design & Finite Element
-                                    Analysis of an AI Data Center</h3>
+                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Structural Design & Finite
+                                    Element Analysis of an AI Data Center</h3>
                                 <p class="text-white/80 text-sm mt-2">Complete structural design and finite element
                                     analysis of a steel-framed AI Data Center including load assessment, wind
                                     evaluation, member sizing, structural verification, and foundation considerations
@@ -588,172 +663,211 @@
         </section>
 
         <!-- SECTION 3: ASSIGNMENT FIELDS -->
-        <section class="py-32 bg-surface-container-low/50 px-margin-mobile md:px-margin-desktop reveal">
+        <section
+            class="py-20 sm:py-28 md:py-32 bg-surface-container-low/50 px-margin-mobile md:px-margin-desktop reveal">
             <div class="max-w-container-max mx-auto">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
-                    <div class="space-y-4">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 mb-14 sm:mb-20">
+                    <div class="space-y-3 sm:space-y-4">
                         <span class="text-label-caps text-on-surface-variant uppercase tracking-widest">Fields of
                             Excellence</span>
-                        <h2 class="font-h2 text-h2-mobile md:text-h2">Specialized Domains.</h2>
+                        <h2 class="font-h2 text-[30px] sm:text-h2-mobile md:text-h2">Specialized Domains.</h2>
                     </div>
-                    <p class="max-w-md text-on-surface-variant/80">From complex engineering projects to data analytics,
-                        our experts cover the spectrum of modern academic disciplines.</p>
+                    <p class="max-w-md text-[15px] sm:text-base text-on-surface-variant/80">From complex engineering
+                        projects to data analytics, our experts cover the spectrum of modern academic disciplines.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
 
                     <!-- Civil Engineering -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-blue-600 text-[20px]">architecture</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-blue-600 text-[18px] sm:text-[20px]">architecture</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Civil Engineering</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Civil Engineering</span>
                     </div>
 
                     <!-- Computer Science -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-violet-600 text-[20px]">memory</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-violet-600 text-[18px] sm:text-[20px]">memory</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Computer Science</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Computer Science</span>
                     </div>
 
                     <!-- Mechanical Engineering -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-amber-600 text-[20px]">settings</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-amber-600 text-[18px] sm:text-[20px]">settings</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Mechanical Engineering</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Mechanical
+                            Engineering</span>
                     </div>
 
                     <!-- Electrical Engineering -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">bolt</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-emerald-600 text-[18px] sm:text-[20px]">bolt</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Electrical Engineering</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Electrical
+                            Engineering</span>
                     </div>
 
                     <!-- Electronic Engineering -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-pink-600 text-[20px]">developer_board</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-pink-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-pink-600 text-[18px] sm:text-[20px]">developer_board</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Electronic Engineering</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Electronic
+                            Engineering</span>
                     </div>
 
                     <!-- Marketing -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-orange-600 text-[20px]">campaign</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-orange-600 text-[18px] sm:text-[20px]">campaign</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Marketing</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Marketing</span>
                     </div>
 
                     <!-- Business Studies -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-blue-600 text-[20px]">business_center</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-blue-600 text-[18px] sm:text-[20px]">business_center</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Business Studies</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Business Studies</span>
                     </div>
 
                     <!-- Robotics -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-violet-600 text-[20px]">smart_toy</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-violet-600 text-[18px] sm:text-[20px]">smart_toy</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Robotics</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Robotics</span>
                     </div>
 
                     <!-- Medicine -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-red-600 text-[20px]">stethoscope</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-red-600 text-[18px] sm:text-[20px]">stethoscope</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Medicine</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Medicine</span>
                     </div>
 
                     <!-- Chemical Engineering -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">science</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-emerald-600 text-[18px] sm:text-[20px]">science</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Chemical Engineering</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Chemical
+                            Engineering</span>
                     </div>
 
                     <!-- Mathematics -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-amber-600 text-[20px]">calculate</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-amber-600 text-[18px] sm:text-[20px]">calculate</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Mathematics</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Mathematics</span>
                     </div>
 
                     <!-- Physics -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-pink-600 text-[20px]">join_inner</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-pink-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-pink-600 text-[18px] sm:text-[20px]">join_inner</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Physics</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Physics</span>
                     </div>
 
                     <!-- Chemistry -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-blue-600 text-[20px]">biotech</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-blue-600 text-[18px] sm:text-[20px]">biotech</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Chemistry</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Chemistry</span>
                     </div>
 
                     <!-- Mechatronics -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
                             <span
-                                class="material-symbols-outlined text-violet-600 text-[20px]">precision_manufacturing</span>
+                                class="material-symbols-outlined text-violet-600 text-[18px] sm:text-[20px]">precision_manufacturing</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Mechatronics</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Mechatronics</span>
                     </div>
 
                     <!-- Health Science -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-red-600 text-[20px]">monitor_heart</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-red-600 text-[18px] sm:text-[20px]">monitor_heart</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Health Science</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Health Science</span>
                     </div>
 
                     <!-- Software Engineering -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">code</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-emerald-600 text-[18px] sm:text-[20px]">code</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Software Engineering</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Software
+                            Engineering</span>
                     </div>
 
                     <!-- Data Science -->
                     <div
-                        class="group flex items-center gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-5 bezier-transition hover:shadow-md cursor-pointer">
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-amber-600 text-[20px]">query_stats</span>
+                        class="group flex items-center gap-3 sm:gap-4 bg-white border border-outline-variant/20 hover:border-primary-container/40 rounded-2xl p-3.5 sm:p-5 bezier-transition hover:shadow-md cursor-pointer">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <span
+                                class="material-symbols-outlined text-amber-600 text-[18px] sm:text-[20px]">query_stats</span>
                         </div>
-                        <span class="text-body-sm font-semibold text-on-surface">Data Science</span>
+                        <span class="text-[13px] sm:text-body-sm font-semibold text-on-surface">Data Science</span>
                     </div>
 
                 </div>
@@ -761,90 +875,96 @@
         </section>
 
         <!-- KINETIC UNIVERSITY PARTNERS (Marquee) -->
-        <section class="py-20 bg-white border-y border-outline-variant/10 overflow-hidden reveal">
-            <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-12">
-                <p class="text-center text-label-caps text-on-surface-variant/40 tracking-[0.4em] uppercase">Supporting
+        <section class="py-14 sm:py-16 md:py-20 bg-white border-y border-outline-variant/10 overflow-hidden reveal">
+            <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-10 sm:mb-12">
+                <p
+                    class="text-center text-label-caps text-on-surface-variant/40 tracking-[0.3em] sm:tracking-[0.4em] uppercase">
+                    Supporting
                     Students From Top Institutions</p>
             </div>
             <!-- Australia Row -->
             <div class="mb-8">
-                <div class="flex items-center gap-6 px-margin-mobile md:px-margin-desktop mb-4">
+                <div class="flex items-center gap-3 sm:gap-6 px-margin-mobile md:px-margin-desktop mb-4">
                     <div class="h-px flex-1 bg-outline-variant/30"></div>
                     <span
-                        class="text-label-caps text-on-surface-variant/50 tracking-[0.3em] uppercase whitespace-nowrap">🇦🇺
+                        class="text-[10px] sm:text-label-caps text-on-surface-variant/50 tracking-[0.2em] sm:tracking-[0.3em] uppercase whitespace-nowrap">🇦🇺
                         Australia</span>
                     <div class="h-px flex-1 bg-outline-variant/30"></div>
                 </div>
                 <div
                     class="marquee-container w-full overflow-hidden flex grayscale hover:grayscale-0 transition-all duration-700">
-                    <div class="marquee-content flex gap-16 items-center">
+                    <div class="marquee-content flex gap-10 sm:gap-16 items-center">
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">RMIT</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">RMIT</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">La
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">La
                             Trobe</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Victoria</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Victoria</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Curtin</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Curtin</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Deakin</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Deakin</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Monash</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Monash</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">EIT</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">EIT</span>
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Melbourne
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Melbourne
                             Polytechnic</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Torrens</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Torrens</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Acknowledge
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Acknowledge
                             Education</span>
                         <!-- Duplicate for seamless loop -->
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">RMIT</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">RMIT</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">La
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">La
                             Trobe</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Victoria</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Victoria</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Curtin</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Curtin</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Deakin</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Deakin</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Monash</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Monash</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">EIT</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">EIT</span>
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Melbourne
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Melbourne
                             Polytechnic</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Torrens</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Torrens</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Acknowledge
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Acknowledge
                             Education</span>
                     </div>
                 </div>
@@ -852,101 +972,106 @@
 
             <!-- UK Row -->
             <div class="mb-8">
-                <div class="flex items-center gap-6 px-margin-mobile md:px-margin-desktop mb-4">
+                <div class="flex items-center gap-3 sm:gap-6 px-margin-mobile md:px-margin-desktop mb-4">
                     <div class="h-px flex-1 bg-outline-variant/30"></div>
                     <span
-                        class="text-label-caps text-on-surface-variant/50 tracking-[0.3em] uppercase whitespace-nowrap">🇬🇧
+                        class="text-[10px] sm:text-label-caps text-on-surface-variant/50 tracking-[0.2em] sm:tracking-[0.3em] uppercase whitespace-nowrap">🇬🇧
                         United Kingdom</span>
                     <div class="h-px flex-1 bg-outline-variant/30"></div>
                 </div>
                 <div
                     class="marquee-container w-full overflow-hidden flex grayscale hover:grayscale-0 transition-all duration-700">
-                    <div class="marquee-content flex gap-16 items-center"
+                    <div class="marquee-content flex gap-10 sm:gap-16 items-center"
                         style="animation-duration: 25s; animation-direction: reverse;">
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
                         <!-- Duplicate for seamless loop -->
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
                         <!-- Extra duplicates for short lists to fill the row -->
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Portsmouth</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Wolverhampton</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Northumbria</span>
                     </div>
                 </div>
             </div>
 
             <!-- Malaysia Row -->
             <div>
-                <div class="flex items-center gap-6 px-margin-mobile md:px-margin-desktop mb-4">
+                <div class="flex items-center gap-3 sm:gap-6 px-margin-mobile md:px-margin-desktop mb-4">
                     <div class="h-px flex-1 bg-outline-variant/30"></div>
                     <span
-                        class="text-label-caps text-on-surface-variant/50 tracking-[0.3em] uppercase whitespace-nowrap">🇲🇾
+                        class="text-[10px] sm:text-label-caps text-on-surface-variant/50 tracking-[0.2em] sm:tracking-[0.3em] uppercase whitespace-nowrap">🇲🇾
                         Malaysia</span>
                     <div class="h-px flex-1 bg-outline-variant/30"></div>
                 </div>
                 <div
                     class="marquee-container w-full overflow-hidden flex grayscale hover:grayscale-0 transition-all duration-700">
-                    <div class="marquee-content flex gap-16 items-center" style="animation-duration: 20s;">
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
+                    <div class="marquee-content flex gap-10 sm:gap-16 items-center" style="animation-duration: 20s;">
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
                             University</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                         <!-- Duplicate for seamless loop -->
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
                             University</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                         <!-- Extra duplicates for short lists to fill the row -->
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
                             University</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
                             University</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                         <span class="text-outline-variant/40">•</span>
-                        <span class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
+                        <span
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Lincoln
                             University</span>
                         <span class="text-outline-variant/40">•</span>
                         <span
-                            class="font-h3 text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
+                            class="font-h3 text-lg sm:text-xl md:text-2xl font-black text-on-surface whitespace-nowrap">Swinburne</span>
                     </div>
                 </div>
             </div>
@@ -954,26 +1079,27 @@
     </main>
 
     <!-- SECTION: STUDENT TESTIMONIALS CAROUSEL -->
-    <section class="py-32 bg-background px-margin-mobile md:px-margin-desktop overflow-hidden reveal">
+    <section class="py-20 sm:py-28 md:py-32 bg-background px-margin-mobile md:px-margin-desktop overflow-hidden reveal">
         <div class="max-w-container-max mx-auto">
 
             <!-- Header -->
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+            <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-4">
                 <span class="text-label-caps text-primary tracking-[0.3em] font-black uppercase">Student
                     Testimonials</span>
-                <h2 class="font-h2 text-h2-mobile md:text-h2 text-on-surface">Real Results. Real Students.</h2>
-                <p class="text-body-lg text-on-surface-variant">Don't just take our word for it — hear directly from
-                    students who've achieved excellence with Chrisentia.</p>
+                <h2 class="font-h2 text-[30px] sm:text-h2-mobile md:text-h2 text-on-surface">Real Results. Real
+                    Students.</h2>
+                <p class="text-[15px] sm:text-body-lg text-on-surface-variant">Don't just take our word for it — hear
+                    directly from students who've achieved excellence with Chrisentia.</p>
             </div>
 
             <!-- Carousel Wrapper -->
-            <div class="relative px-8">
+            <div class="relative px-0 sm:px-8">
                 <div class="overflow-hidden" id="testimonialTrack">
                     <div class="flex gap-4 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)]"
                         id="testimonialSlider">
 
                         <!-- Slide 1 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-1.jpeg" class="w-full object-cover"
@@ -983,7 +1109,7 @@
                         </div>
 
                         <!-- Slide 2 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-2.jpeg" class="w-full object-cover"
@@ -993,7 +1119,7 @@
                         </div>
 
                         <!-- Slide 3 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-3.jpeg" class="w-full object-cover"
@@ -1003,7 +1129,7 @@
                         </div>
 
                         <!-- Slide 4 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-4.jpeg" class="w-full object-cover"
@@ -1013,7 +1139,7 @@
                         </div>
 
                         <!-- Slide 5  -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-5.jpeg" class="w-full object-cover"
@@ -1023,7 +1149,7 @@
                         </div>
 
                         <!-- Slide 6 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-6.jpeg" class="w-full object-cover"
@@ -1033,7 +1159,7 @@
                         </div>
 
                         <!-- Slide 7  -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-7.jpeg" class="w-full object-cover"
@@ -1043,7 +1169,7 @@
                         </div>
 
                         <!-- Slide 8 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-8.jpeg" class="w-full object-cover"
@@ -1053,7 +1179,7 @@
                         </div>
 
                         <!-- Slide 9 -->
-                        <div class="testimonial-slide flex-shrink-0" style="width: calc((100% - 32px) / 3);">
+                        <div class="testimonial-slide flex-shrink-0">
                             <div class="rounded-[1.5rem] overflow-hidden shadow-xl bg-[#0a1628] p-2">
                                 <div class="rounded-[1rem] overflow-hidden">
                                     <img src="images/fd-9.jpeg" class="w-full object-cover"
@@ -1067,12 +1193,12 @@
 
                 <!-- Prev/Next Buttons -->
                 <button id="testimonialPrev"
-                    class="absolute left-0 top-[45%] -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-outline-variant shadow-md flex items-center justify-center hover:bg-primary-container hover:text-white hover:border-primary-container bezier-transition z-10">
-                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    class="absolute left-1 sm:left-0 top-[45%] -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-outline-variant shadow-md flex items-center justify-center hover:bg-primary-container hover:text-white hover:border-primary-container bezier-transition z-10">
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">arrow_back</span>
                 </button>
                 <button id="testimonialNext"
-                    class="absolute right-0 top-[45%] -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-outline-variant shadow-md flex items-center justify-center hover:bg-primary-container hover:text-white hover:border-primary-container bezier-transition z-10">
-                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    class="absolute right-1 sm:right-0 top-[45%] -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-outline-variant shadow-md flex items-center justify-center hover:bg-primary-container hover:text-white hover:border-primary-container bezier-transition z-10">
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">arrow_forward</span>
                 </button>
             </div>
 
@@ -1088,7 +1214,6 @@
                 const slides = slider.querySelectorAll('.testimonial-slide');
                 const dotsContainer = document.getElementById('testimonialDots');
                 let current = 0;
-                const VISIBLE = 3;
                 const GAP = 16;
 
                 slides.forEach((_, i) => {
@@ -1099,12 +1224,21 @@
                     dotsContainer.appendChild(dot);
                 });
 
+                // Responsive: how many slides are visible at once depends on viewport width
+                function getVisibleCount() {
+                    const w = window.innerWidth;
+                    if (w >= 1024) return 3;
+                    if (w >= 640) return 2;
+                    return 1;
+                }
+
                 function getSlideWidth() {
                     return slides[0].offsetWidth + GAP;
                 }
 
                 function goTo(n) {
-                    const max = Math.max(0, slides.length - VISIBLE);
+                    const visible = getVisibleCount();
+                    const max = Math.max(0, slides.length - visible);
                     current = Math.max(0, Math.min(n, max));
                     slider.style.transform = `translateX(-${current * getSlideWidth()}px)`;
                     dotsContainer.querySelectorAll('button').forEach((d, i) => {
@@ -1124,42 +1258,51 @@
                     if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
                 });
 
+                // Recalculate position on resize (debounced)
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => goTo(current), 150);
+                });
+
                 goTo(0);
             })();
     </script>
 
     <!-- FOOTER -->
-    <footer class="bg-surface-dim pt-32 pb-12 px-margin-mobile md:px-margin-desktop relative" id="connect">
+    <footer class="bg-surface-dim pt-20 sm:pt-28 md:pt-32 pb-10 sm:pb-12 px-margin-mobile md:px-margin-desktop relative"
+        id="connect">
         <div class="max-w-container-max mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-32">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 sm:gap-20 mb-20 sm:mb-28 md:mb-32">
                 <!-- Left: CTA + Contact -->
-                <div class="space-y-12">
+                <div class="space-y-8 sm:space-y-12">
                     <h2
-                        class="font-h2 text-h1-mobile md:text-h1 text-on-surface tracking-tighter max-w-lg leading-none">
+                        class="font-h2 text-[34px] leading-[1.1] xs:text-h1-mobile md:text-h1 text-on-surface tracking-tighter max-w-lg">
                         Ready to elevate your grades?
                     </h2>
-                    <div class="flex flex-col gap-6">
-                        <a class="flex items-center gap-6 group" href="https://wa.me/94777158913" target="_blank">
+                    <div class="flex flex-col gap-5 sm:gap-6">
+                        <a class="flex items-center gap-4 sm:gap-6 group" href="https://wa.me/94777158913"
+                            target="_blank">
                             <div
-                                class="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 bezier-transition flex-shrink-0">
-                                <span class="material-symbols-outlined text-primary text-3xl">chat</span>
+                                class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 bezier-transition flex-shrink-0">
+                                <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">chat</span>
                             </div>
-                            <div>
+                            <div class="min-w-0">
                                 <p class="text-label-caps text-on-surface-variant/60 uppercase">WhatsApp Us</p>
                                 <p
-                                    class="font-h3 text-2xl font-bold text-on-surface group-hover:text-primary bezier-transition">
+                                    class="font-h3 text-lg sm:text-2xl font-bold text-on-surface group-hover:text-primary bezier-transition truncate">
                                     +94 77 715 8913</p>
                             </div>
                         </a>
-                        <a class="flex items-center gap-6 group" href="mailto:chrisentiasolutions@gmail.com">
+                        <a class="flex items-center gap-4 sm:gap-6 group" href="mailto:chrisentiasolutions@gmail.com">
                             <div
-                                class="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 bezier-transition flex-shrink-0">
-                                <span class="material-symbols-outlined text-primary text-3xl">mail</span>
+                                class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 bezier-transition flex-shrink-0">
+                                <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">mail</span>
                             </div>
-                            <div>
+                            <div class="min-w-0">
                                 <p class="text-label-caps text-on-surface-variant/60 uppercase">Email Us</p>
                                 <p
-                                    class="font-h3 text-2xl font-bold text-on-surface group-hover:text-primary bezier-transition">
+                                    class="font-h3 text-base sm:text-2xl font-bold text-on-surface group-hover:text-primary bezier-transition truncate">
                                     chrisentiasolutions@gmail.com</p>
                             </div>
                         </a>
@@ -1167,12 +1310,12 @@
                 </div>
 
                 <!-- Right: Navigation + Socials -->
-                <div class="flex flex-col justify-center gap-12">
-                    <div class="space-y-6">
+                <div class="flex flex-col justify-center gap-10 sm:gap-12">
+                    <div class="space-y-5 sm:space-y-6">
                         <h4 class="text-label-caps text-primary font-black uppercase tracking-widest">Navigation</h4>
-                        <ul class="space-y-4">
+                        <ul class="space-y-3 sm:space-y-4">
                             <li>
-                                <a class="font-h3 text-xl text-on-surface hover:text-primary bezier-transition inline-flex items-center gap-2 group"
+                                <a class="font-h3 text-lg sm:text-xl text-on-surface hover:text-primary bezier-transition inline-flex items-center gap-2 group"
                                     href="#projects">
                                     Projects
                                     <span
@@ -1180,29 +1323,22 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="font-h3 text-xl text-on-surface hover:text-primary bezier-transition inline-flex items-center gap-2 group"
+                                <a class="font-h3 text-lg sm:text-xl text-on-surface hover:text-primary bezier-transition inline-flex items-center gap-2 group"
                                     href="#studio">
                                     Studio
                                     <span
                                         class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 bezier-transition">arrow_forward</span>
                                 </a>
                             </li>
-                            <!-- <li>
-                                <a class="font-h3 text-xl text-on-surface hover:text-primary bezier-transition inline-flex items-center gap-2 group"
-                                    href="#">
-                                    Privacy Policy
-                                    <span
-                                        class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 bezier-transition">arrow_forward</span>
-                                </a>
-                            </li> -->
                         </ul>
                     </div>
 
                     <div>
-                        <h4 class="text-label-caps text-primary font-black uppercase tracking-widest mb-6">Follow Us
-                        </h4>
+                        <h4 class="text-label-caps text-primary font-black uppercase tracking-widest mb-5 sm:mb-6">
+                            Follow
+                            Us</h4>
                         <div class="flex items-center gap-4">
-                            <a class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
+                            <a class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
                                 href="https://www.facebook.com/share/1CkYwAzVVv/?mibextid=wwXIfr" target="_blank"
                                 rel="noopener noreferrer" aria-label="Facebook">
                                 <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -1211,7 +1347,7 @@
                                 </svg>
                             </a>
 
-                            <a class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
+                            <a class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
                                 href="https://www.instagram.com/chrisentia.solutions" target="_blank"
                                 rel="noopener noreferrer" aria-label="Instagram">
                                 <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -1219,44 +1355,22 @@
                                         d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 0 1 1.523.99 4.088 4.088 0 0 1 .99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 0 1-.99 1.523 4.088 4.088 0 0 1-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 0 1-1.523-.99 4.088 4.088 0 0 1-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 0 1 .99-1.523A4.088 4.088 0 0 1 5.15 2.636c.46-.163 1.26-.349 2.43-.403C8.845 2.175 9.225 2.163 12 2.163zm0 1.838c-3.153 0-3.506.012-4.744.069-1.145.052-1.766.244-2.18.405a3.253 3.253 0 0 0-1.21.787 3.253 3.253 0 0 0-.787 1.21c-.161.414-.353 1.035-.405 2.18C2.617 9.894 2.606 10.247 2.606 12s.011 2.106.068 3.344c.052 1.145.244 1.766.405 2.18.193.496.437.85.787 1.21.36.35.714.594 1.21.787.414.161 1.035.353 2.18.405 1.238.057 1.591.068 4.744.068s3.506-.011 4.744-.068c1.145-.052 1.766-.244 2.18-.405a3.253 3.253 0 0 0 1.21-.787c.35-.36.594-.714.787-1.21.161-.414.353-1.035.405-2.18.057-1.238.068-1.591.068-4.744s-.011-3.506-.068-4.744c-.052-1.145-.244-1.766-.405-2.18a3.253 3.253 0 0 0-.787-1.21 3.253 3.253 0 0 0-1.21-.787c-.414-.161-1.035-.353-2.18-.405-1.238-.057-1.591-.069-4.744-.069zm0 3.122a4.877 4.877 0 1 1 0 9.754 4.877 4.877 0 0 1 0-9.754zm0 1.838a3.04 3.04 0 1 0 0 6.078 3.04 3.04 0 0 0 0-6.078zm5.073-2.122a1.14 1.14 0 1 1 0 2.28 1.14 1.14 0 0 1 0-2.28z" />
                                 </svg>
                             </a>
-
-                            <!-- <a class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
-                                href="#" aria-label="Facebook">
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path
-                                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-                                </svg>
-                            </a>
-                            <a class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
-                                href="#" aria-label="Instagram">
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path
-                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.088 4.088 0 0 1 1.523.99 4.088 4.088 0 0 1 .99 1.524c.163.46.349 1.26.403 2.43.058 1.265.07 1.645.07 4.849s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.088 4.088 0 0 1-.99 1.523 4.088 4.088 0 0 1-1.524.99c-.46.163-1.26.349-2.43.403-1.265.058-1.645.07-4.849.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.088 4.088 0 0 1-1.523-.99 4.088 4.088 0 0 1-.99-1.524c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.088 4.088 0 0 1 .99-1.523A4.088 4.088 0 0 1 5.15 2.636c.46-.163 1.26-.349 2.43-.403C8.845 2.175 9.225 2.163 12 2.163zm0 1.838c-3.153 0-3.506.012-4.744.069-1.145.052-1.766.244-2.18.405a3.253 3.253 0 0 0-1.21.787 3.253 3.253 0 0 0-.787 1.21c-.161.414-.353 1.035-.405 2.18C2.617 9.894 2.606 10.247 2.606 12s.011 2.106.068 3.344c.052 1.145.244 1.766.405 2.18.193.496.437.85.787 1.21.36.35.714.594 1.21.787.414.161 1.035.353 2.18.405 1.238.057 1.591.068 4.744.068s3.506-.011 4.744-.068c1.145-.052 1.766-.244 2.18-.405a3.253 3.253 0 0 0 1.21-.787c.35-.36.594-.714.787-1.21.161-.414.353-1.035.405-2.18.057-1.238.068-1.591.068-4.744s-.011-3.506-.068-4.744c-.052-1.145-.244-1.766-.405-2.18a3.253 3.253 0 0 0-.787-1.21 3.253 3.253 0 0 0-1.21-.787c-.414-.161-1.035-.353-2.18-.405-1.238-.057-1.591-.069-4.744-.069zm0 3.122a4.877 4.877 0 1 1 0 9.754 4.877 4.877 0 0 1 0-9.754zm0 1.838a3.04 3.04 0 1 0 0 6.078 3.04 3.04 0 0 0 0-6.078zm5.073-2.122a1.14 1.14 0 1 1 0 2.28 1.14 1.14 0 0 1 0-2.28z" />
-                                </svg>
-                            </a> -->
-                            <!-- <a class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-container hover:border-primary-container hover:text-white bezier-transition"
-                                href="#" aria-label="WhatsApp">
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-                                </svg>
-                            </a> -->
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Bar -->
-            <div class="pt-12 border-t border-outline/20 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div
+                class="pt-10 sm:pt-12 border-t border-outline/20 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6 text-center md:text-left">
                 <div class="flex items-center gap-3">
                     <img alt="Chrisentia Solutions Logo" class="h-7 w-7 rounded-full border border-outline-variant"
                         src="images/logo-chrisentia.jpg" />
-                    <span class="font-h3 text-xl font-black text-on-surface">Chrisentia Solutions</span>
-
+                    <span class="font-h3 text-lg sm:text-xl font-black text-on-surface">Chrisentia Solutions</span>
                 </div>
                 <div class="flex items-center gap-8 text-label-caps text-on-surface-variant/60 font-medium">
-                    <span class="text-body-sm text-on-surface-variant/40">© 2026 Chrisentia Solutions. All rights
-                        reserved.</span>
+                    <span class="text-[12px] sm:text-body-sm text-on-surface-variant/40">© 2026 Chrisentia Solutions.
+                        All rights reserved.</span>
                 </div>
             </div>
         </div>
@@ -1320,6 +1434,27 @@
 
         // 4. Initial Trigger for Reveal on Load
         window.dispatchEvent(new Event('scroll'));
+
+        // 5. Mobile nav toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileNavPanel = document.getElementById('mobile-nav-panel');
+
+        if (mobileMenuBtn && mobileNavPanel) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isOpen = mobileNavPanel.classList.toggle('open');
+                mobileMenuBtn.classList.toggle('open', isOpen);
+                mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            // Close mobile menu when a link is tapped
+            mobileNavPanel.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNavPanel.classList.remove('open');
+                    mobileMenuBtn.classList.remove('open');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
     </script>
 </body>
 
