@@ -281,6 +281,85 @@
                 font-size: 30px !important;
             }
         }
+
+/* OVERLAPPED CAROUSEL STYLES - 3-UP PEEK VIEW */
+
+      #carouselWrapper {
+        perspective: 1200px;
+        position: relative;
+        overflow: visible;
+      }
+
+      .project-card-overlay {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        will-change: transform, z-index, opacity;
+        transform-style: preserve-3d;
+        display: block;
+        transition:
+          transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.7s ease;
+      }
+
+      .project-card-overlay:hover {
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Dark hover shade only on non-active (peek) cards */
+      .project-card-overlay.is-peek .peek-hover-shade {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 15;
+        pointer-events: none;
+      }
+
+      .project-card-overlay.is-peek:hover .peek-hover-shade {
+        opacity: 1;
+      }
+
+      /* Click-to-reveal description on the active card (no longer hover-based) */
+      .project-card-overlay .card-title {
+        transition: opacity 0.3s ease;
+      }
+
+      .project-card-overlay .card-description {
+        transition: opacity 0.3s ease;
+      }
+
+      .project-card-overlay.show-description .card-title {
+        opacity: 0;
+      }
+
+      .project-card-overlay.show-description .card-description {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .project-card-overlay {
+          transition: none !important;
+        }
+      }
+
+      /* Mobile: fall back to single full-width card with swipe (no peeks, not enough room) */
+      @media (max-width: 768px) {
+        #carouselWrapper {
+          height: 320px !important;
+        }
+
+        .project-card-overlay {
+          width: 100% !important;
+        }
+
+        .project-card-overlay.is-peek {
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+      }  
     </style>
 </head>
 
@@ -403,7 +482,7 @@
                             </div>
                         </div>
                         <div class="flex flex-col">
-                            <span class="font-h3 text-lg sm:text-xl font-bold">500+</span>
+                            <span class="font-h3 text-lg sm:text-xl font-bold">600+</span>
                             <span class="text-label-caps text-on-surface-variant/60 uppercase">Trusted Students</span>
                         </div>
                     </div>
@@ -418,7 +497,7 @@
                             <div class="flex flex-col gap-2">
                                 <span class="text-white/60 text-label-caps tracking-widest uppercase">Expertise
                                     Hub</span>
-                                <h3 class="text-white font-h3 text-2xl">100+ Verified Tutors</h3>
+                                <h3 class="text-white font-h3 text-2xl">360+ Verified Tutors</h3>
                             </div>
                         </div>
                     </div>
@@ -640,114 +719,234 @@
                     </div>
                     <p class="max-w-md text-[15px] sm:text-base text-on-surface-variant/80">A showcase of real assignments and projects completed by our expert tutors — spanning engineering, data analytics, business, computer science, and beyond.</p>
                 </div>
+ <!-- Overlapped Carousel Container -->
+          <div
+            class="relative w-full max-w-4xl mx-auto px-4 sm:px-8 flex items-center justify-center"
+          >
+            <!-- Carousel Wrapper with fixed height -->
+            <div
+              class="relative w-full h-[300px] sm:h-[360px] md:h-[400px]"
+              id="carouselWrapper"
+            >
+              <!-- Card 1 -->
+              <div
+                class="project-card-overlay absolute top-0 left-1/2 w-[70%] sm:w-[62%] md:w-[54%] h-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer"
+                data-index="0"
+                role="button"
+                tabindex="0"
+                aria-label="Project 1: Hydrodynamic CFD Analysis"
+              >
+                <img
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms]"
+                  src="images/submarine.jpeg"
+                  alt="Hydrodynamic CFD Analysis"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+                ></div>
+                <div class="peek-hover-shade"></div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-
-                    <!-- Field Card 1 -->
-                    <div
-                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
-                        <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
-                            src="images/submarine.jpeg" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                        <!-- Title only (default state) -->
-                        <div
-                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Hydrodynamic CFD Analysis of
-                                DARPA SUBOFF Submarine</h3>
-                        </div>
-
-                        <!-- Title + description (shown on hover) -->
-                        <div
-                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
-                            <div>
-                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Hydrodynamic CFD Analysis
-                                    of
-                                    DARPA SUBOFF Submarine</h3>
-                                <p class="text-white/80 text-sm mt-2">Performed Computational Fluid Dynamics (CFD)
-                                    simulation and hydrodynamic analysis of the DARPA SUBOFF submarine geometry using
-                                    ANSYS Fluent. The project focused on turbulence modelling, mesh optimization, drag
-                                    prediction, and validation against experimental data to evaluate underwater
-                                    performance.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Field Card 2 -->
-                    <div
-                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
-                        <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
-                            src="images/Supersonic Missile.png" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                        <div
-                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Supersonic Missile Aerodynamic
-                                Analysis Using CFD</h3>
-                        </div>
-
-                        <div
-                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
-                            <div>
-                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Supersonic Missile
-                                    Aerodynamic Analysis Using CFD</h3>
-                                <p class="text-white/80 text-sm mt-2">Performed high-speed aerodynamic simulation and
-                                    optimization of a 2D supersonic missile using ANSYS Fluent. The study evaluated drag
-                                    and lift performance under varying attack angles while applying advanced structured
-                                    meshing and turbulence modelling techniques.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Field Card 3 -->
-                    <div
-                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
-                        <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
-                            src="images/structural-design.png" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                        <div
-                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Structural Design & Finite
-                                Element Analysis of an AI Data Center</h3>
-                        </div>
-
-                        <div
-                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
-                            <div>
-                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">Structural Design & Finite
-                                    Element Analysis of an AI Data Center</h3>
-                                <p class="text-white/80 text-sm mt-2">Complete structural design and finite element
-                                    analysis of a steel-framed AI Data Center including load assessment, wind
-                                    evaluation, member sizing, structural verification, and foundation considerations
-                                    using Australian design standards and SPACE GASS simulation.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Field Card 4 -->
-                    <div
-                        class="axion-card field-card group relative h-[340px] sm:h-[380px] md:h-[400px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
-                        <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
-                            src="images/AI-Driven Surrogate.png" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                        <div
-                            class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-10 transition-opacity duration-300 group-hover:opacity-0">
-                            <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">AI-Driven Surrogate Modelling for Mechanical Performance Prediction of Lattice Structures</h3>
-                        </div>
-
-                        <div
-                            class="absolute inset-0 z-20 flex items-end p-6 sm:p-8 bg-black/70 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300">
-                            <div>
-                                <h3 class="text-white font-h3 text-xl sm:text-2xl font-bold">AI-Driven Surrogate Modelling for Mechanical Performance Prediction of Lattice Structures</h3>
-                                <p class="text-white/80 text-sm mt-2">Developed a hybrid finite-element and machine-learning framework to predict mechanical performance of AFCC lattice structures under compression using surrogate models trained on simulation-generated datasets.</p>
-                            </div>
-                        </div>
-                    </div>
-
-
+                <!-- Title only (default state) -->
+                <div
+                  class="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 z-10 transition-opacity duration-300 card-title"
+                >
+                  <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                    Hydrodynamic CFD Analysis of DARPA SUBOFF Submarine
+                  </h3>
                 </div>
+
+                <!-- Title + description (shown on click) -->
+                <div
+                  class="absolute inset-0 z-20 flex items-end p-5 sm:p-6 bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300 card-description"
+                >
+                  <div>
+                    <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                      Hydrodynamic CFD Analysis of DARPA SUBOFF Submarine
+                    </h3>
+                    <p class="text-white/80 text-sm mt-2">
+                      Performed Computational Fluid Dynamics (CFD) simulation
+                      and hydrodynamic analysis of the DARPA SUBOFF submarine
+                      geometry using ANSYS Fluent. The project focused on
+                      turbulence modelling, mesh optimization, drag prediction,
+                      and validation against experimental data to evaluate
+                      underwater performance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div
+                class="project-card-overlay absolute top-0 left-1/2 w-[70%] sm:w-[62%] md:w-[54%] h-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer"
+                data-index="1"
+                role="button"
+                tabindex="0"
+                aria-label="Project 2: Supersonic Missile Aerodynamic Analysis"
+              >
+                <img
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms]"
+                  src="images/Supersonic Missile.png"
+                  alt="Supersonic Missile Analysis"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+                ></div>
+                <div class="peek-hover-shade"></div>
+
+                <div
+                  class="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 z-10 transition-opacity duration-300 card-title"
+                >
+                  <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                    Supersonic Missile Aerodynamic Analysis Using CFD
+                  </h3>
+                </div>
+
+                <div
+                  class="absolute inset-0 z-20 flex items-end p-5 sm:p-6 bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300 card-description"
+                >
+                  <div>
+                    <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                      Supersonic Missile Aerodynamic Analysis Using CFD
+                    </h3>
+                    <p class="text-white/80 text-sm mt-2">
+                      Performed high-speed aerodynamic simulation and
+                      optimization of a 2D supersonic missile using ANSYS
+                      Fluent. The study evaluated drag and lift performance
+                      under varying attack angles while applying advanced
+                      structured meshing and turbulence modelling techniques.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div
+                class="project-card-overlay absolute top-0 left-1/2 w-[70%] sm:w-[62%] md:w-[54%] h-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer"
+                data-index="2"
+                role="button"
+                tabindex="0"
+                aria-label="Project 3: Structural Design & FEA"
+              >
+                <img
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms]"
+                  src="images/structural-design.png"
+                  alt="Data Center Structural Design"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+                ></div>
+                <div class="peek-hover-shade"></div>
+
+                <div
+                  class="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 z-10 transition-opacity duration-300 card-title"
+                >
+                  <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                    Structural Design & Finite Element Analysis of an AI Data
+                    Center
+                  </h3>
+                </div>
+
+                <div
+                  class="absolute inset-0 z-20 flex items-end p-5 sm:p-6 bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300 card-description"
+                >
+                  <div>
+                    <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                      Structural Design & Finite Element Analysis of an AI Data
+                      Center
+                    </h3>
+                    <p class="text-white/80 text-sm mt-2">
+                      Complete structural design and finite element analysis of
+                      a steel-framed AI Data Center including load assessment,
+                      wind evaluation, member sizing, structural verification,
+                      and foundation considerations using Australian design
+                      standards and SPACE GASS simulation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div
+                class="project-card-overlay absolute top-0 left-1/2 w-[70%] sm:w-[62%] md:w-[54%] h-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer"
+                data-index="3"
+                role="button"
+                tabindex="0"
+                aria-label="Project 4: AI-Driven Surrogate Modelling"
+              >
+                <img
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms]"
+                  src="images/AI-Driven Surrogate.png"
+                  alt="AI Surrogate Modelling"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+                ></div>
+                <div class="peek-hover-shade"></div>
+
+                <div
+                  class="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 z-10 transition-opacity duration-300 card-title"
+                >
+                  <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                    AI-Driven Surrogate Modelling for Mechanical Performance
+                    Prediction of Lattice Structures
+                  </h3>
+                </div>
+
+                <div
+                  class="absolute inset-0 z-20 flex items-end p-5 sm:p-6 bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300 card-description"
+                >
+                  <div>
+                    <h3 class="text-white font-h3 text-lg sm:text-xl font-bold">
+                      AI-Driven Surrogate Modelling for Mechanical Performance
+                      Prediction of Lattice Structures
+                    </h3>
+                    <p class="text-white/80 text-sm mt-2">
+                      Developed a hybrid finite-element and machine-learning
+                      framework to predict mechanical performance of AFCC
+                      lattice structures under compression using surrogate
+                      models trained on simulation-generated datasets.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button
+              id="carouselPrev"
+              class="absolute left-0 sm:-left-2 md:-left-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border border-outline-variant shadow-lg hover:bg-primary-container hover:text-white hover:border-primary-container transition-all duration-300 z-40 flex items-center justify-center"
+              aria-label="Previous project"
+            >
+              <span class="material-symbols-outlined text-[18px] sm:text-[22px]"
+                >arrow_back</span
+              >
+            </button>
+
+            <button
+              id="carouselNext"
+              class="absolute right-0 sm:-right-2 md:-right-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border border-outline-variant shadow-lg hover:bg-primary-container hover:text-white hover:border-primary-container transition-all duration-300 z-40 flex items-center justify-center"
+              aria-label="Next project"
+            >
+              <span class="material-symbols-outlined text-[18px] sm:text-[22px]"
+                >arrow_forward</span
+              >
+            </button>
+          </div>
+
+          <!-- Carousel Indicators -->
+          <div
+            class="flex justify-center gap-3 mt-8 sm:mt-12"
+            id="carouselDots"
+          ></div>
+
+          <!-- Project Counter -->
+          <p
+            class="text-center text-sm sm:text-base text-on-surface-variant/60 mt-5 font-medium"
+          >
+            <span id="currentProject">1</span> /
+            <span id="totalProjects">4</span>
+          </p>
+                
             </div>
         </section>
 
@@ -1577,6 +1776,134 @@
                 });
             });
         }
+
+
+      // OVERLAPPED CAROUSEL SLIDER SCRIPT - 3-UP PEEK VIEW
+(function() {
+    const wrapper = document.getElementById('carouselWrapper');
+    const cards = wrapper.querySelectorAll('.project-card-overlay');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    const dotsContainer = document.getElementById('carouselDots');
+    const currentProjectSpan = document.getElementById('currentProject');
+    const totalProjectsSpan = document.getElementById('totalProjects');
+
+    let currentIndex = 0;
+    const totalCards = cards.length;
+
+    totalProjectsSpan.textContent = totalCards;
+
+    cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'w-3 h-3 rounded-full bg-outline-variant transition-all duration-300';
+        dot.setAttribute('aria-label', `Go to project ${i + 1}`);
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    });
+
+    function updateCarousel() {
+        cards.forEach((card, index) => {
+            let distance = index - currentIndex;
+            if (distance > totalCards / 2) distance -= totalCards;
+            if (distance < -totalCards / 2) distance += totalCards;
+
+            card.classList.remove('is-active', 'is-peek');
+
+            if (distance === 0) {
+                card.style.transform = 'translateX(-50%) scale(1)';
+                card.style.zIndex = 30;
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+                card.classList.add('is-active');
+            } else if (distance === -1 || distance === 1) {
+                const sideOffset = distance === -1 ? -98 : 98;
+                card.style.transform = `translateX(calc(-50% + ${sideOffset}%)) scale(0.82)`;
+                card.style.zIndex = 20;
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+                card.classList.add('is-peek');
+                card.classList.remove('show-description');
+            } else {
+                const farOffset = distance < 0 ? -180 : 180;
+                card.style.transform = `translateX(calc(-50% + ${farOffset}%)) scale(0.7)`;
+                card.style.zIndex = 0;
+                card.style.opacity = '0';
+                card.style.pointerEvents = 'none';
+                card.classList.remove('show-description');
+            }
+        });
+
+        dotsContainer.querySelectorAll('button').forEach((dot, i) => {
+            const isActive = i === currentIndex;
+            dot.className = isActive
+                ? 'w-8 h-3 rounded-full bg-primary-container transition-all duration-300'
+                : 'w-3 h-3 rounded-full bg-outline-variant transition-all duration-300';
+        });
+
+        currentProjectSpan.textContent = currentIndex + 1;
+    }
+
+    function goToSlide(n) {
+        currentIndex = (n + totalCards) % totalCards;
+        updateCarousel();
+    }
+
+    prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
+    nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+    cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+            if (index !== currentIndex) {
+                // Peek card clicked -> bring it to center
+                goToSlide(index);
+            } else {
+                // Active card clicked -> toggle description shade
+                card.classList.toggle('show-description');
+            }
+        });
+
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (index !== currentIndex) {
+                    goToSlide(index);
+                } else {
+                    card.classList.toggle('show-description');
+                }
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (wrapper.contains(document.activeElement) || document.activeElement === document.body) {
+            if (e.key === 'ArrowLeft') goToSlide(currentIndex - 1);
+            if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
+        }
+    });
+
+    let startX = 0;
+    let startY = 0;
+
+    wrapper.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            goToSlide(diffX > 0 ? currentIndex + 1 : currentIndex - 1);
+        }
+    });
+
+    updateCarousel();
+})();
+
+        
     </script>
 </body>
 
